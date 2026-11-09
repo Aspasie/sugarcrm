@@ -662,13 +662,18 @@ function safeEqual(a, b) {
   return diff === 0;
 }
 
+function configuredSecret(env) {
+  // Les espaces ou retours de ligne collés par erreur dans Cloudflare sont ignorés.
+  return typeof env.MCP_SECRET === "string" ? env.MCP_SECRET.trim() : "";
+}
+
 function authorized(request, url, env) {
-  const secret = env.MCP_SECRET;
-  if (!secret || secret.length < 24) return false; // échoue fermé si le secret est absent ou trop court
+  const secret = configuredSecret(env);
+  if (secret.length < 24) return false; // échoue fermé si le secret est absent ou trop court
   const parts = url.pathname.split("/").filter(Boolean); // ["mcp", "<secret>"]
-  if (parts.length === 2 && safeEqual(parts[1], secret)) return true;
+  if (parts.length === 2 && safeEqual(decodeURIComponent(parts[1]).trim(), secret)) return true;
   const auth = request.headers.get("Authorization") || "";
-  return parts.length === 1 && auth.startsWith("Bearer ") && safeEqual(auth.slice(7), secret);
+  return parts.length === 1 && auth.startsWith("Bearer ") && safeEqual(auth.slice(7).trim(), secret);
 }
 
 export default {
@@ -681,11 +686,13 @@ export default {
     if (!url.pathname.startsWith("/mcp")) {
       return new Response("Not found", { status: 404 });
     }
-    if (!env.MCP_SECRET || env.MCP_SECRET.length < 24) {
+    if (configuredSecret(env).length < 24) {
       return json(500, { error: "MCP_SECRET absent ou trop court (24 caractères minimum)." });
     }
     if (!authorized(request, url, env)) {
-      return new Response("Unauthorized", { status: 401 });
+      // 404 plutôt que 401 : un 401 pousse claude.ai à tenter une inscription OAuth,
+      // ce qui masque la vraie cause (secret absent ou différent dans l'adresse).
+      return new Response("Not found", { status: 404 });
     }
     if (request.method === "GET") {
       // Pas de flux SSE initié par le serveur en mode sans état.

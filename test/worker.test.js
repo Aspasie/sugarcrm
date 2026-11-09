@@ -46,10 +46,10 @@ beforeEach(() => {
   _internal.resetCaches();
 });
 
-test("refuse sans secret ou avec un mauvais secret", async () => {
+test("refuse sans secret ou avec un mauvais secret (404, pas 401)", async () => {
   fakeSugar(() => ({}));
-  assert.equal((await rpc(baseEnv, "tools/list", {}, "/mcp/mauvais")).status, 401);
-  assert.equal((await rpc(baseEnv, "tools/list", {}, "/mcp")).status, 401);
+  assert.equal((await rpc(baseEnv, "tools/list", {}, "/mcp/mauvais")).status, 404);
+  assert.equal((await rpc(baseEnv, "tools/list", {}, "/mcp")).status, 404);
   assert.equal((await rpc({ ...baseEnv, MCP_SECRET: "court" }, "tools/list", {}, "/mcp/court")).status, 500);
 });
 
@@ -183,4 +183,10 @@ test("erreur Sugar renvoyée lisiblement à Claude", async () => {
   const r = await call(baseEnv, "sugar_get_record", { module: "Accounts", id: "a1" });
   assert.equal(r.isError, true);
   assert.match(r.text, /not_authorized/);
+});
+
+test("secret avec espaces ou retour de ligne dans Cloudflare : accepté", async () => {
+  fakeSugar(() => ({}));
+  const env = { ...baseEnv, MCP_SECRET: `  ${SECRET}\n` };
+  assert.equal((await rpc(env, "ping", {})).status, 200);
 });

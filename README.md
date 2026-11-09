@@ -87,7 +87,7 @@ l'adresse `/mcp` avec l'en-tête `Authorization: Bearer <MCP_SECRET>`.
 | `Connexion à Sugar refusée ... invalid_grant` | Mauvais identifiants, ou connexion par SugarIdentity (SSO) |
 | `... invalid_client` | Plateforme non reconnue par Sugar (vérifier `SUGAR_PLATFORM`) |
 | Déconnexions de l'application mobile Sugar | Le même compte utilise la plateforme `mobile` ailleurs |
-| `401 Unauthorized` dans Claude | URL du connecteur incomplète ou secret modifié |
+| « Impossible de s'inscrire auprès du service de connexion » ou 404 | Le secret dans l'adresse ne correspond pas à `MCP_SECRET` dans Cloudflare |
 | Outils d'écriture absents | `WRITE_ENABLED` n'est pas à `true` |
 
 ## Développement
