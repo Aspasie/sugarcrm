@@ -57,7 +57,7 @@ Les identifiants Sugar ne doivent **jamais** se trouver dans ce dépôt.
 
 1. Cloudflare > **Workers & Pages** > **Create** > **Import a repository**.
 2. Autoriser l'accès à GitHub si demandé, puis choisir ce dépôt.
-3. Nom du projet : `sugarcrm-mcp` (doit correspondre à `name` dans `wrangler.toml`).
+3. Nom du projet : `sugarcrm` (doit correspondre à `name` dans `wrangler.toml`).
 4. Laisser les commandes par défaut et cliquer sur **Deploy**.
 
 ### 2. Ajouter les réglages
@@ -67,13 +67,13 @@ Chaque ajout redéploie le Worker automatiquement.
 
 ### 3. Vérifier
 
-Ouvrir `https://sugarcrm-mcp.<votre-sous-domaine>.workers.dev/` : la page doit afficher `ok`.
+Ouvrir `https://sugarcrm.wispy-king-3ab6.workers.dev/` : la page doit afficher `ok`.
 
 ### 4. Brancher dans Claude
 
 1. claude.ai > **Réglages** > **Connecteurs** > **Ajouter un connecteur personnalisé**.
 2. Nom : `SugarCRM`.
-3. URL : `https://sugarcrm-mcp.<votre-sous-domaine>.workers.dev/mcp/<MCP_SECRET>`
+3. URL : `https://sugarcrm.wispy-king-3ab6.workers.dev/mcp/<MCP_SECRET>`
 4. Dans les réglages du connecteur, mettre les outils d'écriture sur **Toujours demander**.
 5. Test : « Utilise sugar_whoami pour vérifier la connexion à Sugar. »
 
