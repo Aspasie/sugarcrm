@@ -1,0 +1,7 @@
+name = "sugarcrm-mcp"
+main = "src/index.js"
+compatibility_date = "2025-10-01"
+
+# Aucune variable ici : tout se règle dans Cloudflare (Settings > Variables and Secrets),
+# pour que les déploiements automatiques depuis GitHub n'écrasent rien.
+keep_vars = true

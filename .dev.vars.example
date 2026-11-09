@@ -1,0 +1,5 @@
+# Copier en .dev.vars pour un essai local avec « npm run dev ». Ne jamais committer .dev.vars.
+SUGAR_USERNAME=
+SUGAR_PASSWORD=
+MCP_SECRET=
+WRITE_ENABLED=false
